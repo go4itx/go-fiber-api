@@ -1,0 +1,18 @@
+[server.http]
+    addr = "0.0.0.0:20105"
+    logger = true
+    enableCors = true
+    enableCsrf = false
+
+[auth.jwt]
+    exp = 30 # Valid for 30 days, please adjust yourself
+    signing = "Rg1ArAWiHW62nfmK"
+    iss = "fiber-rest-server"
+
+[mysql.test]
+    connMaxLifetime = 300 #secend
+    debug = true
+    dsn = "root:123456@tcp(127.0.0.1:3306)/fiber_rest?charset=utf8mb4&parseTime=True&loc=Local"
+    maxIdleConns = 5
+    maxOpenConns = 10
+    tablePrefix = ""
