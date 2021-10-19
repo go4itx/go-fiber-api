@@ -8,6 +8,7 @@ import (
 	"home/pkg/code"
 	"home/pkg/code/e"
 	"log"
+	"strings"
 )
 
 var (
@@ -40,7 +41,7 @@ func Struct(params interface{}) error {
 
 // Variable Single parameter
 func Variable(fieldName string, val interface{}, tag string) error {
-	if err := v.Var(val, tag); err != nil {
+	if err := v.Var(val, strings.ReplaceAll(tag, " ", "")); err != nil {
 		if validationErrors, ok := err.(validator.ValidationErrors); ok {
 			for _, err := range validationErrors {
 				return e.NewError(code.ParamsIsInvalid, fieldName+err.Translate(trans))

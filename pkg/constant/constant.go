@@ -10,5 +10,5 @@ const (
 	DeleteNo  = 2
 
 	// 默认分页数
-	DefaultPageSize uint32 = 10
+	DefaultPageSize int = 10
 )
