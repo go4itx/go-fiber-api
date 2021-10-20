@@ -97,7 +97,7 @@ func success(data ...interface{}) (ret result) {
 		}
 	case 2, 3:
 		tmp := map[string]interface{}{
-			"list":  data[0],
+			"items": data[0],
 			"count": data[1],
 			"ext":   "",
 		}

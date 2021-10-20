@@ -13,10 +13,62 @@ func Init(db *gorm.DB) (err error) {
 			return
 		}
 
-		db.Create(&User{
-			Name:     "admin",
-			Password: "admin",
-			RoleID:   1,
+		db.Create(&[]User{
+			{
+				Name:     "test001",
+				Password: "123456",
+				RoleID:   1,
+			},
+			{
+				Name:     "test002",
+				Password: "123456",
+				RoleID:   1,
+			},
+			{
+				Name:     "test003",
+				Password: "123456",
+				RoleID:   1,
+			},
+			{
+				Name:     "test004",
+				Password: "123456",
+				RoleID:   1,
+			},
+			{
+				Name:     "test005",
+				Password: "123456",
+				RoleID:   1,
+			},
+			{
+				Name:     "test006",
+				Password: "123456",
+				RoleID:   1,
+			},
+			{
+				Name:     "test007",
+				Password: "123456",
+				RoleID:   1,
+			},
+			{
+				Name:     "test008",
+				Password: "123456",
+				RoleID:   1,
+			},
+			{
+				Name:     "test009",
+				Password: "123456",
+				RoleID:   1,
+			},
+			{
+				Name:     "test010",
+				Password: "123456",
+				RoleID:   1,
+			},
+			{
+				Name:     "test011",
+				Password: "123456",
+				RoleID:   1,
+			},
 		})
 	}
 

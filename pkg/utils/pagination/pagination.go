@@ -4,8 +4,8 @@ import "home/pkg/constant"
 
 // Pagination unified paging parameters
 type Pagination struct {
-	Page int `validate:"required"`
-	Size int `validate:"required"`
+	Page int `validate:"numeric"`
+	Size int `validate:"numeric"`
 }
 
 // paging Processing paging parameters

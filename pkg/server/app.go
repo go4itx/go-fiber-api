@@ -33,7 +33,9 @@ func Init(prefix string, noAuth func(*fiber.App), auth func(fiber.Router)) (err 
 	}
 
 	if config.EnableCors {
-		app.Use(cors.New())
+		app.Use(cors.New(cors.Config{
+			AllowCredentials: true,
+		}))
 	}
 
 	// custom return results
