@@ -7,6 +7,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	jwtWare "github.com/gofiber/jwt/v3"
+	"home/pkg/code/e"
 	"home/pkg/resp"
 	"home/pkg/utils/conf"
 	"home/pkg/utils/jwt"
@@ -47,6 +48,10 @@ func Init(prefix string, noAuth func(*fiber.App), auth func(fiber.Router)) (err 
 	router := app.Group(prefix, jwtWare.New(jwtWare.Config{
 		SigningKey: []byte(jwt.Config.Signing),
 		ErrorHandler: func(ctx *fiber.Ctx, err error) error {
+			if err != nil {
+				err = e.NewError(fiber.StatusUnauthorized, err.Error())
+			}
+
 			return err
 		},
 	}))
