@@ -13,9 +13,16 @@ import (
 	"home/pkg/utils/jwt"
 )
 
+type Config struct {
+	Addr       string
+	EnableCors bool
+	EnableCsrf bool
+	Logger     bool
+}
+
 // Init server
 func Init(prefix string, noAuth func(*fiber.App), auth func(fiber.Router)) (err error) {
-	var config conf.Server
+	var config Config
 	if err = conf.Load("server.http", &config); err != nil {
 		return
 	}
@@ -46,7 +53,7 @@ func Init(prefix string, noAuth func(*fiber.App), auth func(fiber.Router)) (err 
 
 	noAuth(app)
 	router := app.Group(prefix, jwtWare.New(jwtWare.Config{
-		SigningKey: []byte(jwt.Config.Signing),
+		SigningKey: []byte(jwt.Signing),
 		ErrorHandler: func(ctx *fiber.Ctx, err error) error {
 			if err != nil {
 				err = e.NewError(fiber.StatusUnauthorized, err.Error())

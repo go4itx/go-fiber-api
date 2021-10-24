@@ -6,34 +6,6 @@ import (
 	"time"
 )
 
-// result Uniform results
-type result struct {
-	Code       int         `json:"code"`
-	Msg        string      `json:"msg"`
-	ServerTime int64       `json:"serverTime"`
-	Data       interface{} `json:"data"`
-}
-
-//  ErrorHandler unified processing error
-func ErrorHandler(ctx *fiber.Ctx, err error) error {
-	ret := result{
-		Code:       0,
-		Msg:        "",
-		ServerTime: time.Now().Unix(),
-		Data:       "",
-	}
-
-	if e, ok := err.(*fiber.Error); ok {
-		ret.Code = e.Code
-		ret.Msg = e.Message
-	} else {
-		ret.Code = fiber.StatusInternalServerError
-		ret.Msg = err.Error()
-	}
-
-	return ctx.Status(fiber.StatusOK).JSON(ret)
-}
-
 type Response struct {
 	ctx *fiber.Ctx
 }

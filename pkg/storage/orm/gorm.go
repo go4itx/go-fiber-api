@@ -10,8 +10,17 @@ import (
 	"time"
 )
 
+type Config struct {
+	Debug           bool
+	Dsn             string
+	MaxIdleConns    int
+	MaxOpenConns    int
+	ConnMaxLifetime int64
+	TablePrefix     string
+}
+
 func Build(name string) (db *gorm.DB, err error) {
-	var config conf.Gorm
+	var config Config
 	if err = conf.Load(name, &config); err != nil {
 		return
 	}
