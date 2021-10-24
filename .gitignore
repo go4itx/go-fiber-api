@@ -1,7 +1,7 @@
 .idea
 cmd/admin
 internal/admin
-config/crud.json
+config/*.json
 
 # Binaries for programs and plugins
 *.exe

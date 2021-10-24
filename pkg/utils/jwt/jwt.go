@@ -3,8 +3,8 @@ package jwt
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/spf13/cast"
 	"home/pkg/utils/conf"
-	"home/pkg/utils/xcast"
 	"log"
 	"time"
 )
@@ -48,9 +48,9 @@ func ParseToken(jwtToken interface{}) (user User, err error) {
 	token := jwtToken.(*jwt.Token)
 	claims := token.Claims.(jwt.MapClaims)
 	user = User{
-		ID:     uint(xcast.ToInt64(claims["id"])),
-		RoleID: uint(xcast.ToInt64(claims["role"])),
-		Name:   xcast.ToString(claims["aud"]),
+		ID:     cast.ToUint(claims["id"]),
+		RoleID: cast.ToUint(claims["role"]),
+		Name:   cast.ToString(claims["aud"]),
 	}
 
 	return
