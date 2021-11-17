@@ -4,8 +4,11 @@ import (
 	"gorm.io/gorm"
 )
 
+var db *gorm.DB
+
 // Init model
-func Init(db *gorm.DB) (err error) {
+func Init(gormDB *gorm.DB) (err error) {
+	db = gormDB
 	// AutoMigrate data
 	if !db.Migrator().HasTable(&User{}) {
 		err = db.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(&User{})

@@ -17,16 +17,19 @@ func newUserService() *userService {
 	return &userService{}
 }
 
-type ParamLogin struct {
+type LoginReq struct {
 	Name     string `validate:"required"`
 	Password string `validate:"required"`
 }
 
+type LoginRes struct {
+	Token string `json:"token"`
+}
+
 // Login service
-func (s *userService) Login(p ParamLogin) (token string, err error) {
+func (s *userService) Login(p LoginReq) (res LoginRes, err error) {
 	user := model.User{Name: p.Name}
-	err = db.Where(&user).First(&user).Error
-	if err != nil {
+	if err = user.Info(); err != nil {
 		err = e.NewError(code.LoginFailed)
 		return
 	}
@@ -41,9 +44,11 @@ func (s *userService) Login(p ParamLogin) (token string, err error) {
 		return
 	}
 
-	return jwt.CreateToken(jwt.User{
+	res.Token, err = jwt.CreateToken(jwt.User{
 		ID:     1,
 		RoleID: 1,
 		Name:   p.Name,
 	})
+
+	return
 }

@@ -1,8 +1,9 @@
 package model
 
 import (
-	"gorm.io/gorm"
 	"home/pkg/utils/password"
+
+	"gorm.io/gorm"
 )
 
 // User object
@@ -32,4 +33,9 @@ func (m *User) BeforeUpdate(db *gorm.DB) (err error) {
 	}
 
 	return
+}
+
+// Info get user info
+func (m *User) Info() (err error) {
+	return db.Where(m).First(m).Error
 }

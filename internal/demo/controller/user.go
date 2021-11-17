@@ -1,11 +1,12 @@
 package controller
 
 import (
-	"github.com/gofiber/fiber/v2"
 	"home/internal/demo/service"
 	"home/pkg/resp"
 	"home/pkg/utils/jwt"
 	"home/pkg/utils/validate"
+
+	"github.com/gofiber/fiber/v2"
 )
 
 type user struct {
@@ -22,7 +23,7 @@ func userRouter(r fiber.Router) {
 
 // login user
 func login(ctx *fiber.Ctx) (err error) {
-	var p service.ParamLogin
+	var p service.LoginReq
 	if err = validate.StructParser(ctx, &p); err != nil {
 		return
 	}
