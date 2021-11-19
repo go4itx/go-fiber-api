@@ -3,6 +3,7 @@
 cmd/admin
 internal/admin
 config/*.json
+config/*-dev.toml
 
 # Binaries for programs and plugins
 *.exe

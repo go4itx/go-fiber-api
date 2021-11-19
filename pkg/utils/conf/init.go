@@ -3,40 +3,41 @@ package conf
 import (
 	"flag"
 	"fmt"
-	"github.com/spf13/viper"
 	"path"
 	"strings"
+
+	"github.com/spf13/viper"
 )
 
-var mainViper *viper.Viper
+var v *viper.Viper
 
 // init viper
 func init() {
 	arg := flag.String("config", "config/config.toml", "config file path")
 	flag.Parse()
-	mainViper = New(*arg)
+	v = New(*arg)
 }
 
 // New Viper
 func New(filePath string) *viper.Viper {
 	ext := path.Ext(filePath)
 	dir, name := path.Split(filePath)
-	v := viper.New()
-	v.AddConfigPath(dir)
-	v.SetConfigType(strings.TrimLeft(ext, "."))
-	v.SetConfigName(strings.TrimRight(name, ext))
-	if err := v.ReadInConfig(); err != nil {
-		panic(fmt.Errorf("Fatal error config file: %w \n", err))
+	vn := viper.New()
+	vn.AddConfigPath(dir)
+	vn.SetConfigType(strings.TrimLeft(ext, "."))
+	vn.SetConfigName(strings.TrimRight(name, ext))
+	if err := vn.ReadInConfig(); err != nil {
+		panic(fmt.Sprintf("Fatal error config file: %v \n", err.Error()))
 	}
 
-	return v
+	return vn
 }
 
 // Load specify configuration
-func Load(name string, config interface{}, v ...*viper.Viper) (err error) {
-	if len(v) > 0 {
-		return v[0].UnmarshalKey(name, config)
+func Load(name string, config interface{}, vv ...*viper.Viper) (err error) {
+	if len(vv) > 0 {
+		return vv[0].UnmarshalKey(name, config)
 	}
 
-	return mainViper.UnmarshalKey(name, config)
+	return v.UnmarshalKey(name, config)
 }
