@@ -82,3 +82,9 @@ func Init(gormDB *gorm.DB) (err error) {
 type ParamID struct {
 	ID uint `form:"id" validate:"required" desc:"ID"`
 }
+
+// OrderBy common struct
+type OrderBy struct {
+	Field     string `json:"field" validate:"required"`
+	Direction string `json:"direction" validate:"required,oneof=asc desc"`
+}
