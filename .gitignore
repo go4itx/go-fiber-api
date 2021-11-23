@@ -2,6 +2,7 @@
 .vscode
 cmd/admin
 internal/admin
+web
 config/*.json
 config/*-dev.toml
 
