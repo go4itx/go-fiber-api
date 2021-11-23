@@ -1,8 +1,9 @@
 package controller
 
 import (
-	"github.com/gofiber/fiber/v2"
 	"home/pkg/server"
+
+	"github.com/gofiber/fiber/v2"
 )
 
 var prefix = "/v1"
@@ -19,5 +20,5 @@ func noAuth(app *fiber.App) {
 
 // Init controller
 func Init() (err error) {
-	return server.Init(prefix, noAuth, auth)
+	return server.Init(prefix, nil, noAuth, auth)
 }
