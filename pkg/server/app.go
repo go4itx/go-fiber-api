@@ -21,8 +21,17 @@ type Config struct {
 	Logger     bool
 }
 
+type Static struct {
+	Prefix string
+	Root   string
+	Config struct {
+		Switch bool
+		Static fiber.Static
+	}
+}
+
 // Init server
-func Init(prefix string, static map[string]string, noAuth func(*fiber.App), auth func(fiber.Router)) (err error) {
+func Init(prefix string, static []Static, noAuth func(*fiber.App), auth func(fiber.Router)) (err error) {
 	var config Config
 	if err = conf.Load("server.http", &config); err != nil {
 		return
@@ -47,8 +56,12 @@ func Init(prefix string, static map[string]string, noAuth func(*fiber.App), auth
 		}))
 	}
 
-	for k, v := range static {
-		app.Static(k, v)
+	for _, v := range static {
+		if v.Config.Switch {
+			app.Static(v.Prefix, v.Root, v.Config.Static)
+		} else {
+			app.Static(v.Prefix, v.Root)
+		}
 	}
 
 	// custom return results
