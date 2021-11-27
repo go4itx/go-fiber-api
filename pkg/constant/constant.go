@@ -11,4 +11,8 @@ const (
 
 	// 默认分页数
 	DefaultPageSize int = 10
+
+	// time format tpl
+	DateTpl     = "2006-01-02"
+	DateTimeTpl = "2006-01-02 15:04:05"
 )
