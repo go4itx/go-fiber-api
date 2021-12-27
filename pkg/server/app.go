@@ -2,8 +2,8 @@ package server
 
 import (
 	"home/pkg/code/e"
+	"home/pkg/conf"
 	"home/pkg/resp"
-	"home/pkg/utils/conf"
 	"home/pkg/utils/jwt"
 
 	"github.com/gofiber/fiber/v2"

@@ -1,12 +1,13 @@
 package jwt
 
 import (
+	"home/pkg/conf"
+	"log"
+	"time"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/spf13/cast"
-	"home/pkg/utils/conf"
-	"log"
-	"time"
 )
 
 type Config struct {

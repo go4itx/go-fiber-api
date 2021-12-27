@@ -2,12 +2,13 @@ package xgorm
 
 import (
 	"errors"
+	"home/pkg/conf"
+	"time"
+
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
-	"home/pkg/utils/conf"
-	"time"
 )
 
 type Config struct {

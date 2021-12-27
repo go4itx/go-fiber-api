@@ -9,35 +9,31 @@ import (
 	"github.com/spf13/viper"
 )
 
-var v *viper.Viper
+var config *viper.Viper
 
 // init viper
 func init() {
 	arg := flag.String("config", "config/config.toml", "config file path")
 	flag.Parse()
-	v = New(*arg)
+	config = New(*arg)
 }
 
 // New Viper
 func New(filePath string) *viper.Viper {
 	ext := path.Ext(filePath)
 	dir, name := path.Split(filePath)
-	vn := viper.New()
-	vn.AddConfigPath(dir)
-	vn.SetConfigType(strings.TrimLeft(ext, "."))
-	vn.SetConfigName(strings.TrimRight(name, ext))
-	if err := vn.ReadInConfig(); err != nil {
+	v := viper.New()
+	v.AddConfigPath(dir)
+	v.SetConfigType(strings.TrimLeft(ext, "."))
+	v.SetConfigName(strings.TrimRight(name, ext))
+	if err := v.ReadInConfig(); err != nil {
 		panic(fmt.Sprintf("Fatal error config file: %v \n", err.Error()))
 	}
 
-	return vn
+	return v
 }
 
 // Load specify configuration
-func Load(name string, config interface{}, vv ...*viper.Viper) (err error) {
-	if len(vv) > 0 {
-		return vv[0].UnmarshalKey(name, config)
-	}
-
-	return v.UnmarshalKey(name, config)
+func Load(name string, data interface{}) (err error) {
+	return config.UnmarshalKey(name, data)
 }

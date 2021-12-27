@@ -3,7 +3,7 @@ package main
 import (
 	"home/internal/demo/controller"
 	"home/internal/demo/model"
-	"home/pkg/utils/xgo"
+	"home/pkg/xgo"
 	"home/pkg/xgorm"
 	"log"
 )
