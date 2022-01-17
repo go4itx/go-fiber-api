@@ -69,19 +69,25 @@ func Init(prefix string, static []Static, noAuth func(*fiber.App), auth func(fib
 		return resp.New(ctx).JSON("hello world")
 	})
 
-	noAuth(app)
-	router := app.Group(prefix, jwtWare.New(jwtWare.Config{
-		SigningKey: []byte(jwt.Signing),
-		ErrorHandler: func(ctx *fiber.Ctx, err error) error {
-			if err != nil {
-				err = e.NewError(fiber.StatusUnauthorized, err.Error())
-			}
+	if noAuth != nil {
+		noAuth(app)
+	}
 
-			return err
-		},
-	}))
+	if auth != nil {
+		router := app.Group(prefix, jwtWare.New(jwtWare.Config{
+			SigningKey: []byte(jwt.Signing),
+			ErrorHandler: func(ctx *fiber.Ctx, err error) error {
+				if err != nil {
+					err = e.NewError(fiber.StatusUnauthorized, err.Error())
+				}
 
-	auth(router)
+				return err
+			},
+		}))
+
+		auth(router)
+	}
+
 	// Handle not founds
 	app.Use(func(ctx *fiber.Ctx) error {
 		return fiber.ErrNotFound
