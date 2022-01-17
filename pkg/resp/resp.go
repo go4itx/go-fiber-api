@@ -1,9 +1,10 @@
 package resp
 
 import (
-	"github.com/gofiber/fiber/v2"
 	"home/pkg/code"
 	"time"
+
+	"github.com/gofiber/fiber/v2"
 )
 
 type Response struct {
@@ -18,15 +19,16 @@ func New(ctx *fiber.Ctx) Response {
 // JSON handle Result
 func (response Response) JSON(data ...interface{}) error {
 	var (
-		err error
-		ok  bool
-		l   = len(data)
-		max = l - 1
+		ok     bool
+		err    error
+		fe     *fiber.Error
+		length = len(data)
+		max    = length - 1
 	)
 
 	// fiber Error
-	if err, ok = data[max].(*fiber.Error); ok && err != nil {
-		return err
+	if fe, ok = data[max].(*fiber.Error); ok && fe != nil {
+		return fe
 	}
 
 	// golang error
@@ -35,8 +37,8 @@ func (response Response) JSON(data ...interface{}) error {
 	}
 
 	var ret result
-	if l == 1 {
-		if data[max] == nil {
+	if length == 1 {
+		if data[max] == nil || err == fe {
 			ret = success()
 			goto END
 		}
