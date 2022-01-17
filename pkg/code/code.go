@@ -1,7 +1,7 @@
 package code
 
-// Ok 成功
-const Ok int = 0
+// OK 成功
+const OK int = 0
 
 //==================客户端 400xxx==================
 // ParamsIsInvalid 参数无效

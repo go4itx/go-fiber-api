@@ -7,6 +7,14 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+// Ret Uniform results
+type Ret struct {
+	Code       int         `json:"code"`
+	Msg        string      `json:"msg"`
+	ServerTime int64       `json:"serverTime"`
+	Data       interface{} `json:"data"`
+}
+
 type Response struct {
 	ctx *fiber.Ctx
 }
@@ -19,7 +27,7 @@ func New(ctx *fiber.Ctx) Response {
 // JSON handle Result
 func (response Response) JSON(data ...interface{}) error {
 	var (
-		ret    result
+		ret    Ret
 		ok     bool
 		err    error
 		fe     *fiber.Error
@@ -60,12 +68,12 @@ END:
 }
 
 // success return ret
-func success(data ...interface{}) (ret result) {
+func success(data ...interface{}) (ret Ret) {
 	length := len(data)
-	ret = result{
-		Code:       code.Ok,
-		Msg:        code.Value(code.Ok),
-		ServerTime: time.Now().Unix(),
+	ret = Ret{
+		Code:       code.OK,
+		Msg:        code.Value(code.OK),
+		ServerTime: time.Now().UnixNano() / 1e6,
 		Data:       "",
 	}
 

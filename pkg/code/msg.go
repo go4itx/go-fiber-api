@@ -2,7 +2,7 @@ package code
 
 // meaning code Corresponding message
 var meaning = map[int]string{
-	Ok: "SUCCESS",
+	OK: "SUCCESS",
 	// client
 	ParamsIsInvalid:   "参数无效",
 	LoginFailed:       "账号或密码错误",
