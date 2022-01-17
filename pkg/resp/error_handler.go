@@ -1,26 +1,17 @@
 package resp
 
 import (
+	"home/pkg/code/e"
+
 	"github.com/gofiber/fiber/v2"
-	"time"
 )
 
 //  ErrorHandler unified processing error
 func ErrorHandler(ctx *fiber.Ctx, err error) error {
-	ret := result{
-		Code:       0,
-		Msg:        "",
-		ServerTime: time.Now().Unix(),
-		Data:       "",
+	fe, ok := err.(*fiber.Error)
+	if !ok {
+		fe = e.NewError(fiber.StatusInternalServerError, err.Error())
 	}
 
-	if e, ok := err.(*fiber.Error); ok {
-		ret.Code = e.Code
-		ret.Msg = e.Message
-	} else {
-		ret.Code = fiber.StatusInternalServerError
-		ret.Msg = err.Error()
-	}
-
-	return ctx.Status(fiber.StatusOK).JSON(ret)
+	return New(ctx).JSON(fe)
 }

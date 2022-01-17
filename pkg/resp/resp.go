@@ -19,12 +19,18 @@ func New(ctx *fiber.Ctx) Response {
 // JSON handle Result
 func (response Response) JSON(data ...interface{}) error {
 	var (
+		ret    result
 		ok     bool
 		err    error
 		fe     *fiber.Error
 		length = len(data)
 		max    = length - 1
 	)
+
+	if length == 0 {
+		ret = success()
+		goto END
+	}
 
 	// fiber Error
 	if fe, ok = data[max].(*fiber.Error); ok && fe != nil {
@@ -36,7 +42,6 @@ func (response Response) JSON(data ...interface{}) error {
 		return err
 	}
 
-	var ret result
 	if length == 1 {
 		if data[max] == nil || err == fe {
 			ret = success()
