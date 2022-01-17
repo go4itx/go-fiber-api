@@ -2,18 +2,11 @@ package resp
 
 import (
 	"home/pkg/code"
+	"home/pkg/code/e"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
 )
-
-// Ret Uniform results
-type Ret struct {
-	Code       int         `json:"code"`
-	Msg        string      `json:"msg"`
-	ServerTime int64       `json:"serverTime"`
-	Data       interface{} `json:"data"`
-}
 
 type Response struct {
 	ctx *fiber.Ctx
@@ -25,75 +18,71 @@ func New(ctx *fiber.Ctx) Response {
 }
 
 // JSON handle Result
-func (response Response) JSON(data ...interface{}) error {
+func (response Response) JSON(params ...interface{}) (err error) {
 	var (
-		ret    Ret
-		ok     bool
-		err    error
-		fe     *fiber.Error
-		length = len(data)
+		data interface{}
+		ok   bool
+		ee   *fiber.Error
+
+		length = len(params)
 		max    = length - 1
 	)
 
-	if length == 0 {
-		ret = success()
-		goto END
-	}
-
-	// fiber Error
-	if fe, ok = data[max].(*fiber.Error); ok && fe != nil {
-		return fe
-	}
-
-	// golang error
-	if err, ok = data[max].(error); ok && err != nil {
-		return err
-	}
-
-	if length == 1 {
-		if data[max] == nil || err == fe {
-			ret = success()
-			goto END
+	if length > 0 {
+		// customize Error
+		if ee, ok = params[max].(*fiber.Error); !ok {
+			// golang error
+			if err, ok = params[max].(error); ok && err != nil {
+				ee = e.NewError(fiber.StatusInternalServerError, err.Error())
+			}
 		}
-
-		ret = success(data[0])
-		goto END
 	}
 
-	ret = success(data[0:max]...)
-	goto END
+	if ee != nil {
+		data = ""
+	} else {
+		ee = e.NewError(code.OK)
+		switch length {
+		case 0:
+			data = ""
+		case 1:
+			data = response.format(params[0])
+		default:
+			data = response.format(params[0:max]...)
+		}
+	}
 
-END:
-	return response.ctx.Status(fiber.StatusOK).JSON(ret)
+	return response.ctx.Status(fiber.StatusOK).JSON(Ret{
+		Code:       ee.Code,
+		Msg:        ee.Message,
+		ServerTime: time.Now().UnixNano() / 1e6,
+		Data:       data,
+	})
 }
 
-// success return ret
-func success(data ...interface{}) (ret Ret) {
-	length := len(data)
-	ret = Ret{
-		Code:       code.OK,
-		Msg:        code.Value(code.OK),
-		ServerTime: time.Now().UnixNano() / 1e6,
-		Data:       "",
-	}
-
+// format return ret data
+func (response Response) format(params ...interface{}) (data interface{}) {
+	length := len(params)
 	switch length {
 	case 1:
-		if length == 1 {
-			ret.Data = data[0]
+		if params[0] == nil {
+			data = ""
+		} else {
+			data = params[0]
 		}
 	case 2, 3:
-		tmp := map[string]interface{}{
-			"items": data[0],
-			"count": data[1],
-			"ext":   "",
+		tmp := PaginationRet{
+			Items: params[0],
+			Count: params[1],
 		}
 
 		if length == 3 {
-			tmp["ext"] = data[2]
+			tmp.Ext = params[2]
 		}
 
-		ret.Data = tmp
+		data = tmp
+	default:
+		data = ""
 	}
 
 	return
