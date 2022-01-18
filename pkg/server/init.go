@@ -1,8 +1,8 @@
 package server
 
 import (
-	"home/pkg/code/e"
 	"home/pkg/conf"
+	"home/pkg/e"
 	"home/pkg/resp"
 	"home/pkg/utils/jwt"
 

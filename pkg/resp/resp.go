@@ -2,7 +2,7 @@ package resp
 
 import (
 	"home/pkg/code"
-	"home/pkg/code/e"
+	"home/pkg/e"
 	"time"
 
 	"github.com/gofiber/fiber/v2"

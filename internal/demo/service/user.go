@@ -3,8 +3,8 @@ package service
 import (
 	"home/internal/demo/model"
 	"home/pkg/code"
-	"home/pkg/code/e"
 	"home/pkg/constant"
+	"home/pkg/e"
 	"home/pkg/utils/jwt"
 	"home/pkg/utils/password"
 )
