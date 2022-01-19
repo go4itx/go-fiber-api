@@ -1,7 +1,7 @@
 package code
 
-// meaning code Corresponding message
-var meaning = map[int]string{
+// kv code Corresponding message
+var kv = map[int]string{
 	OK: "SUCCESS",
 	// client
 	ParamsIsInvalid:   "参数无效",
@@ -16,9 +16,9 @@ var meaning = map[int]string{
 	UserRegisterFailed:        "用户注册失败",
 }
 
-// Value get msg by code
-func Value(code int) string {
-	if msg, ok := meaning[code]; ok {
+// Message get msg by code
+func Message(code int) string {
+	if msg, ok := kv[code]; ok {
 		return msg
 	} else {
 		return ""
