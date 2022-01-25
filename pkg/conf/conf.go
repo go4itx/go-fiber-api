@@ -29,7 +29,7 @@ func New(filePath string) *viper.Viper {
 	v := viper.New()
 	v.AddConfigPath(dir)
 	v.SetConfigType(strings.TrimLeft(ext, "."))
-	v.SetConfigName(strings.TrimRight(name, ext))
+	v.SetConfigName(strings.ReplaceAll(name, ext, ""))
 	if err := v.ReadInConfig(); err != nil {
 		panic(fmt.Sprintf("Fatal error config file: %v \n", err.Error()))
 	}
