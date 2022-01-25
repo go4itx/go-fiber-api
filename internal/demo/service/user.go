@@ -23,7 +23,8 @@ type LoginReq struct {
 }
 
 type LoginRes struct {
-	Token string `json:"token"`
+	Token  string `json:"token"`
+	Expire int64  `json:"expire"`
 }
 
 // Login service
@@ -44,7 +45,7 @@ func (s *userService) Login(p LoginReq) (res LoginRes, err error) {
 		return
 	}
 
-	res.Token, err = jwt.CreateToken(jwt.User{
+	res.Token, res.Expire, err = jwt.CreateToken(jwt.User{
 		ID:     1,
 		RoleID: 1,
 		Name:   p.Name,

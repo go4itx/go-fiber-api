@@ -36,18 +36,19 @@ type User struct {
 }
 
 // CreateToken return token
-func CreateToken(user User) (token string, err error) {
+func CreateToken(user User) (token string, expire int64, err error) {
+	expire = time.Now().Add(time.Hour * time.Duration(24*config.Exp)).Unix()
 	claims := jwt.MapClaims{
 		"id":   user.ID,
 		"aud":  user.Name,
 		"iss":  config.Iss,
 		"iat":  time.Now().Unix(),
-		"exp":  time.Now().Add(time.Hour * time.Duration(24*config.Exp)).Unix(),
+		"exp":  expire,
 		"role": user.RoleID,
 	}
 
-	jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return jwtToken.SignedString([]byte(Signing))
+	token, err = jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(Signing))
+	return
 }
 
 // ParseToken return jwt claims
