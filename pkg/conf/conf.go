@@ -9,19 +9,23 @@ import (
 	"github.com/spf13/viper"
 )
 
-var config *viper.Viper
+var Viper *viper.Viper
 
 // init viper
 func init() {
 	arg := flag.String("config", "config/config.toml", "config file path")
 	flag.Parse()
-	config = New(*arg)
+	Viper = New(*arg)
 }
 
 // New Viper
 func New(filePath string) *viper.Viper {
 	ext := path.Ext(filePath)
 	dir, name := path.Split(filePath)
+	if dir == "" {
+		dir = "./"
+	}
+
 	v := viper.New()
 	v.AddConfigPath(dir)
 	v.SetConfigType(strings.TrimLeft(ext, "."))
@@ -35,5 +39,5 @@ func New(filePath string) *viper.Viper {
 
 // Load specify configuration
 func Load(name string, data interface{}) (err error) {
-	return config.UnmarshalKey(name, data)
+	return Viper.UnmarshalKey(name, data)
 }
