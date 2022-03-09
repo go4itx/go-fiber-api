@@ -4,6 +4,13 @@
     enableCors = true
     enableCsrf = false
 
+[server.im]
+    maxConns = 100
+
+[account.admin]
+    name = "admin"
+    password = "123456"
+
 [auth.jwt]
     exp = 30 # Valid for 30 days, please adjust yourself
     signing = "Rg1ArAWiHW62nfmK"
