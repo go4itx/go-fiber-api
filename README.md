@@ -33,32 +33,32 @@ header参数： Bearer Token
 
 ### 2.指令说明
 ```
-    错误code
-	
-    USER_IS_ONLINE   uint8 = 1 // 用户已在线
-    
-	EXCEED_MAX_CONNS uint8 = 2 // 超出最大连接限制
-    
-	INCOMPLETE_INFO  uint8 = 3  //信息不完整
+错误code
+
+USER_IS_ONLINE   uint8 = 1 // 用户已在线
+
+EXCEED_MAX_CONNS uint8 = 2 // 超出最大连接限制
+
+INCOMPLETE_INFO  uint8 = 3  //信息不完整
 
 ```
 ```
-	//99：注册，100：踢单人下线 120：心跳，121：一对一消息，200：踢一组下线 ，201：群组消息， 210：全网广播...
-	KICK       uint8 = 100
-	REGISTER   uint8 = 101
-	HEARTBEAT  uint8 = 120
-	P2P        uint8 = 121
-	KICK_GROUP uint8 = 200
-	GROUP      uint8 = 201
-	BROADCAST  uint8 = 210
+//99：注册，100：踢单人下线 120：心跳，121：一对一消息，200：踢一组下线 ，201：群组消息， 210：全网广播...
+KICK       uint8 = 100
+REGISTER   uint8 = 101
+HEARTBEAT  uint8 = 120
+P2P        uint8 = 121
+KICK_GROUP uint8 = 200
+GROUP      uint8 = 201
+BROADCAST  uint8 = 210
 ```
 ```
-    type Message struct {
-        CMD  uint8       `json:"cmd" validate:"required"`
-        From string      `json:"from" validate:"required"` // 发送者即用户id，必须保证一个唯一
-        To   string      `json:"to" validate:"required"`   // cmd==10x是表示用户id，cmd==20x是表示群gid
-        Body interface{} `json:"body" validate:"required"` // 消息内容
-    }
+type Message struct {
+    CMD  uint8       `json:"cmd" validate:"required"`
+    From string      `json:"from" validate:"required"` // 发送者即用户id，必须保证一个唯一
+    To   string      `json:"to" validate:"required"`   // cmd==10x是表示用户id，cmd==20x是表示群gid
+    Body interface{} `json:"body" validate:"required"` // 消息内容
+}
 ```
 ### 3.websocket连接例子（JavaScript）
 ```
@@ -110,5 +110,5 @@ post: /v1/im/kick
 #### 在线用户
 get: /v1/im/online
 ```
-    参数：id或gid
+参数：id或gid
 ```
