@@ -33,14 +33,10 @@ header参数： Bearer Token
 
 ### 2.指令说明
 ```
-错误code
-
+// 错误code
 USER_IS_ONLINE   uint8 = 1 // 用户已在线
-
 EXCEED_MAX_CONNS uint8 = 2 // 超出最大连接限制
-
 INCOMPLETE_INFO  uint8 = 3  //信息不完整
-
 ```
 ```
 //99：注册，100：踢单人下线 120：心跳，121：一对一消息，200：踢一组下线 ，201：群组消息， 210：全网广播...
