@@ -19,6 +19,7 @@ type Config struct {
 	EnableCors bool
 	EnableCsrf bool
 	Logger     bool
+	BodyLimit  int
 }
 
 type Static struct {
@@ -37,7 +38,12 @@ func Init(prefix string, static []Static, noAuth func(*fiber.App), auth func(fib
 		return
 	}
 
+	if config.BodyLimit == 0 {
+		config.BodyLimit = 4 * 1024 * 1024 // 4MB
+	}
+
 	app := fiber.New(fiber.Config{
+		BodyLimit:    config.BodyLimit,
 		ErrorHandler: resp.ErrorHandler,
 	})
 
