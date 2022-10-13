@@ -1,10 +1,18 @@
 .idea
 .vscode
-cmd/admin
-internal/admin
 web*
+ws-*
 config/*.json
 config/*-dev.toml
+config/*-pro.toml
+
+# Ignored items
+release
+cmd/admin
+internal/admin
+cmd/devops
+internal/devops
+
 
 # Binaries for programs and plugins
 *.exe
