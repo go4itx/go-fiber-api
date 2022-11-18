@@ -1,7 +1,7 @@
 package code
 
-// kv code Corresponding message
-var kv = map[int]string{
+// codeMsg code Corresponding message
+var codeMsg = map[int]string{
 	OK: "SUCCESS",
 	// client
 	ParamsIsInvalid:   "参数无效",
@@ -18,7 +18,7 @@ var kv = map[int]string{
 
 // Message get msg by code
 func Message(code int) string {
-	if msg, ok := kv[code]; ok {
+	if msg, ok := codeMsg[code]; ok {
 		return msg
 	} else {
 		return ""
