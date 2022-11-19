@@ -10,8 +10,6 @@ config/*-pro.toml
 release
 cmd/admin
 internal/admin
-cmd/devops
-internal/devops
 
 
 # Binaries for programs and plugins

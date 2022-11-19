@@ -1,0 +1,14 @@
+package service
+
+type {{.Name}}Service struct {
+}
+
+// new{{.Name2came}}Service ...
+func new{{.Name2came}}Service() *{{.Name}}Service {
+	return &{{.Name}}Service{}
+}
+
+// Index ...
+func (s *{{.Name}}Service) Index() (res string, err error) {
+	return "hi, {{.Name}}!", nil
+}
