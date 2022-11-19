@@ -1,7 +1,7 @@
 package code
 
-// codeMsg code Corresponding message
-var codeMsg = map[int]string{
+// relation code Corresponding message
+var relation = map[int]string{
 	OK: "SUCCESS",
 	// client
 	ParamsIsInvalid:   "参数无效",
@@ -18,7 +18,7 @@ var codeMsg = map[int]string{
 
 // Message get msg by code
 func Message(code int) string {
-	if msg, ok := codeMsg[code]; ok {
+	if msg, ok := relation[code]; ok {
 		return msg
 	} else {
 		return ""
