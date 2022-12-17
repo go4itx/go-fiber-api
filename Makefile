@@ -11,4 +11,4 @@ im-docs:
 	swag i -g ./internal/im/controller/init.go --exclude internal/demo,internal/admin  -o ./docs/im
 	
 cli:
-	go run cmd/cli/main.go --name=project --module=all
+	go run cmd/cli/main.go --app=hello --target=all --targetName=hello
