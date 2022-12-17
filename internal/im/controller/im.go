@@ -12,18 +12,13 @@ import (
 type im struct {
 }
 
-// imRouter current controller router
-func imRouter(r fiber.Router) {
-	router := r.Group("/im")
-	{
-		im := &im{}
-		router.Get("/online", im.Online)
-		router.Post("/kick", im.Kick)
-		router.Post("/sendMessage", im.SendMessage)
-	}
-}
-
-// Kick im
+// Kick ...
+// @Title 踢人
+// @Description 踢人下线
+// @Tags im
+// @Param body body service.Message true "参数"
+// @Success 200 {object} resp.Ret "code==0请求成功，否则请求失败！"
+// @router /kick [post]
 func (*im) Kick(ctx *fiber.Ctx) (err error) {
 	var p service.Message
 	if err = validate.StructParser(ctx, &p); err != nil {
@@ -33,7 +28,13 @@ func (*im) Kick(ctx *fiber.Ctx) (err error) {
 	return resp.New(ctx).JSON(service.IM.Kick(p))
 }
 
-// Online im
+// Online ...
+// @Title 在线
+// @Description 在线用户
+// @Tags im
+// @Param body body service.User true "参数"
+// @Success 200 {object} []service.User "code==0请求成功，否则请求失败！"
+// @router /online [get]
 func (*im) Online(ctx *fiber.Ctx) (err error) {
 	var p service.User
 	if err = validate.StructParser(ctx, &p); err != nil {
@@ -43,7 +44,13 @@ func (*im) Online(ctx *fiber.Ctx) (err error) {
 	return resp.New(ctx).JSON(service.IM.Online(p))
 }
 
-// SendMessage im
+// SendMessage ...
+// @Title 发送
+// @Description 发送消息
+// @Tags im
+// @Param body body service.Message true "参数"
+// @Success 200 {object} resp.Ret "code==0请求成功，否则请求失败！"
+// @router /sendMessage [post]
 func (*im) SendMessage(ctx *fiber.Ctx) (err error) {
 	var p service.Message
 	if err = validate.StructParser(ctx, &p); err != nil {
@@ -53,7 +60,7 @@ func (*im) SendMessage(ctx *fiber.Ctx) (err error) {
 	return resp.New(ctx).JSON(service.IM.SendMessage(p))
 }
 
-// ws im
+// ws ...
 func ws() fiber.Handler {
 	return websocket.New(func(conn *websocket.Conn) {
 		service.IM.WS(conn)

@@ -7,9 +7,10 @@ config/*-dev.toml
 config/*-pro.toml
 
 # Ignored items
-release
 cmd/admin
 internal/admin
+
+# Ignored directories
 
 
 # Binaries for programs and plugins

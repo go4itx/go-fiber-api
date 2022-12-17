@@ -1,4 +1,4 @@
-# fiber-rest-server 单仓库多应用、自动代码生成
+# fiber-rest-server 单仓库多应用、自动代码生成、swagger接口文档
 基于golang、fiber、gorm的rest脚手架，快速开发web api
 
 ## 一、demo架子

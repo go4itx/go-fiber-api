@@ -1,0 +1,98 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is api document",
+        "title": "DEMO API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:20105",
+    "basePath": "/v1",
+    "paths": {
+        "/info": {
+            "get": {
+                "description": "用户信息",
+                "tags": [
+                    "user"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "code==0请求成功，否则请求失败！",
+                        "schema": {
+                            "$ref": "#/definitions/jwt.User"
+                        }
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "description": "用户登录",
+                "tags": [
+                    "user"
+                ],
+                "parameters": [
+                    {
+                        "description": "参数",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/service.LoginReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "code==0请求成功，否则请求失败！",
+                        "schema": {
+                            "$ref": "#/definitions/service.LoginRes"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "jwt.User": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "roleID": {
+                    "type": "integer"
+                }
+            }
+        },
+        "service.LoginReq": {
+            "type": "object",
+            "required": [
+                "name",
+                "password"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "service.LoginRes": {
+            "type": "object",
+            "properties": {
+                "expire": {
+                    "type": "integer"
+                },
+                "token": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

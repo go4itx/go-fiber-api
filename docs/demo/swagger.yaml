@@ -1,0 +1,63 @@
+basePath: /v1
+definitions:
+  jwt.User:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      roleID:
+        type: integer
+    type: object
+  service.LoginReq:
+    properties:
+      name:
+        type: string
+      password:
+        type: string
+    required:
+    - name
+    - password
+    type: object
+  service.LoginRes:
+    properties:
+      expire:
+        type: integer
+      token:
+        type: string
+    type: object
+host: localhost:20105
+info:
+  contact: {}
+  description: This is api document
+  title: DEMO API
+  version: "1.0"
+paths:
+  /info:
+    get:
+      description: 用户信息
+      responses:
+        "200":
+          description: code==0请求成功，否则请求失败！
+          schema:
+            $ref: '#/definitions/jwt.User'
+      tags:
+      - user
+  /login:
+    post:
+      description: 用户登录
+      parameters:
+      - description: 参数
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/service.LoginReq'
+      responses:
+        "200":
+          description: code==0请求成功，否则请求失败！
+          schema:
+            $ref: '#/definitions/service.LoginRes'
+      tags:
+      - user
+swagger: "2.0"

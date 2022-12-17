@@ -1,0 +1,151 @@
+basePath: /v1
+definitions:
+  jwt.User:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      roleID:
+        type: integer
+    type: object
+  resp.Ret:
+    properties:
+      code:
+        type: integer
+      data: {}
+      msg:
+        type: string
+      serverTime:
+        type: integer
+    type: object
+  service.LoginReq:
+    properties:
+      name:
+        type: string
+      password:
+        type: string
+    required:
+    - name
+    - password
+    type: object
+  service.LoginRes:
+    properties:
+      expire:
+        type: integer
+      token:
+        type: string
+    type: object
+  service.Message:
+    properties:
+      body:
+        description: 消息内容
+      cmd:
+        type: integer
+      from:
+        description: 发送者即用户id，必须保证一个唯一
+        type: string
+      to:
+        description: cmd==10x是表示用户id，cmd==20x是表示群gid
+        type: string
+    required:
+    - body
+    - cmd
+    - from
+    - to
+    type: object
+  service.User:
+    properties:
+      gid:
+        type: string
+      id:
+        type: string
+    type: object
+host: localhost:20105
+info:
+  contact: {}
+  description: This is api document
+  title: IM API
+  version: "1.0"
+paths:
+  /info:
+    get:
+      description: 用户信息
+      responses:
+        "200":
+          description: code==0请求成功，否则请求失败！
+          schema:
+            $ref: '#/definitions/jwt.User'
+      tags:
+      - admin
+  /kick:
+    post:
+      description: 踢人下线
+      parameters:
+      - description: 参数
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/service.Message'
+      responses:
+        "200":
+          description: code==0请求成功，否则请求失败！
+          schema:
+            $ref: '#/definitions/resp.Ret'
+      tags:
+      - im
+  /login:
+    post:
+      description: 用户登录
+      parameters:
+      - description: 参数
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/service.LoginReq'
+      responses:
+        "200":
+          description: code==0请求成功，否则请求失败！
+          schema:
+            $ref: '#/definitions/service.LoginRes'
+      tags:
+      - admin
+  /online:
+    get:
+      description: 在线用户
+      parameters:
+      - description: 参数
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/service.User'
+      responses:
+        "200":
+          description: code==0请求成功，否则请求失败！
+          schema:
+            items:
+              $ref: '#/definitions/service.User'
+            type: array
+      tags:
+      - im
+  /sendMessage:
+    post:
+      description: 发送消息
+      parameters:
+      - description: 参数
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/service.Message'
+      responses:
+        "200":
+          description: code==0请求成功，否则请求失败！
+          schema:
+            $ref: '#/definitions/resp.Ret'
+      tags:
+      - im
+swagger: "2.0"
