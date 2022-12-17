@@ -10,8 +10,8 @@ var prefix = "/v1"
 
 // noAuth  no user authentication required
 func noAuth(app *fiber.App) {
-    {{.Name}} := {{.Name}}{}
-	app.Get(prefix+"/", {{.Name}}.index)
+    {{.TargetName}} := {{.TargetName}}{}
+	app.Get(prefix+"/", {{.TargetName}}.index)
 }
 
 // Init ...

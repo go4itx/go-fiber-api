@@ -23,49 +23,59 @@ const (
 
 var (
 	Relation = map[string]string{
-		CMD_MAIN:        "cmd/{project}/main.go",
-		CONTROLLER:      "internal/{project}/controller/{project}.go",
-		CONTROLLER_INIT: "internal/{project}/controller/init.go",
-		SERVICE:         "internal/{project}/service/{project}.go",
-		SERVICE_INIT:    "internal/{project}/service/init.go",
+		CMD_MAIN:        "cmd/{app}/main.go",
+		CONTROLLER:      "internal/{app}/controller/{targetName}.go",
+		CONTROLLER_INIT: "internal/{app}/controller/init.go",
+		SERVICE:         "internal/{app}/service/{targetName}.go",
+		SERVICE_INIT:    "internal/{app}/service/init.go",
 	}
 )
 
 type Project struct {
-	Name      string
-	Name2came string
+	App             string
+	Target          string
+	TargetName      string
+	TargetName2came string
 }
 
 func main() {
-	name := flag.String("name", "", "project name")
-	module := flag.String("module", "all", "enum: all/c/s")
+	app := flag.String("app", "", "app name")
+	target := flag.String("target", "all", "enum: all/c/s") // c->controller, s->service
+	targetName := flag.String("targetName", "", "target name")
 	flag.Parse()
-	if *name == "" {
-		log.Println("Please enter the project name")
+	if *app == "" {
+		log.Println("Please enter the app name")
 		return
 	}
 
-	modules := make([]string, 0)
-	switch *module {
+	if *targetName == "" {
+		log.Println("Please enter the target name")
+		return
+	}
+
+	targets := make([]string, 0)
+	switch *target {
 	case "all":
 		for key := range Relation {
-			modules = append(modules, key)
+			targets = append(targets, key)
 		}
 	case "s":
-		modules = []string{SERVICE}
+		targets = []string{SERVICE}
 	case "c":
-		modules = []string{CONTROLLER}
+		targets = []string{CONTROLLER}
 	default:
 		log.Println("unknown module")
 		return
 	}
 
 	project := Project{
-		Name:      *name,
-		Name2came: xstring.Snake2came(*name, true),
+		App:             *app,
+		Target:          *target,
+		TargetName:      *targetName,
+		TargetName2came: xstring.Snake2came(*targetName, true),
 	}
 
-	for _, key := range modules {
+	for _, key := range targets {
 		if err := gen(key, project); err != nil {
 			log.Println(err)
 			return
@@ -85,17 +95,18 @@ func gen(tplName string, project Project) (err error) {
 		return
 	}
 
-	target, ok := Relation[tplName]
+	targetFile, ok := Relation[tplName]
 	if !ok {
 		return fmt.Errorf("no %s in relation", tplName)
 	}
 
-	target = strings.ReplaceAll(target, "{project}", project.Name)
-	if err = xfile.MakeDirectory(filepath.Dir(target)); err != nil {
+	targetFile = strings.ReplaceAll(targetFile, "{app}", project.App)
+	targetFile = strings.ReplaceAll(targetFile, "{targetName}", project.TargetName)
+	if err = xfile.MakeDirectory(filepath.Dir(targetFile)); err != nil {
 		return
 	}
 
-	file, err := os.OpenFile(target, os.O_CREATE|os.O_WRONLY, 0755)
+	file, err := os.OpenFile(targetFile, os.O_CREATE|os.O_WRONLY, 0755)
 	if err != nil {
 		return
 	}

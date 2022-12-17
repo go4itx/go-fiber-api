@@ -1,16 +1,16 @@
 package controller
 
 import (
-	"home/internal/{{.Name}}/service"
+	"home/internal/{{.App}}/service"
 	"home/pkg/resp"
 
 	"github.com/gofiber/fiber/v2"
 )
 
-type {{.Name}} struct {
+type {{.TargetName}} struct {
 }
 
 // index ...
-func (*{{.Name}}) index(ctx *fiber.Ctx) (err error) {
-	return resp.New(ctx).JSON(service.{{.Name2came}}.Index())
+func (*{{.TargetName}}) index(ctx *fiber.Ctx) (err error) {
+	return resp.New(ctx).JSON(service.{{.TargetName2came}}.Index())
 }

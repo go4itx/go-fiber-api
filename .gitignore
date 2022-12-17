@@ -9,6 +9,8 @@ config/*-pro.toml
 # Ignored items
 cmd/admin
 internal/admin
+cmd/bullet
+internal/bullet
 
 # Ignored directories
 

@@ -1,14 +1,14 @@
 package service
 
-type {{.Name}}Service struct {
+type {{.TargetName}}Service struct {
 }
 
-// new{{.Name2came}}Service ...
-func new{{.Name2came}}Service() *{{.Name}}Service {
-	return &{{.Name}}Service{}
+// new{{.TargetName2came}}Service ...
+func new{{.TargetName2came}}Service() *{{.TargetName}}Service {
+	return &{{.TargetName}}Service{}
 }
 
 // Index ...
-func (s *{{.Name}}Service) Index() (res string, err error) {
-	return "hi, {{.Name}}!", nil
+func (s *{{.TargetName}}Service) Index() (res string, err error) {
+	return "hi, {{.TargetName}}!", nil
 }

@@ -1,5 +1,5 @@
 package service
 
 var (
-	{{.Name2came}} = new{{.Name2came}}Service()
+	{{.TargetName2came}} = new{{.TargetName2came}}Service()
 )
