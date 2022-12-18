@@ -23,12 +23,9 @@ type Config struct {
 }
 
 type Static struct {
-	Prefix string
-	Root   string
-	Config struct {
-		Switch bool
-		Static fiber.Static
-	}
+	Prefix      string
+	Root        string
+	FiberStatic []fiber.Static
 }
 
 // Init server
@@ -63,11 +60,7 @@ func Init(prefix string, static []Static, noAuth func(*fiber.App), auth func(fib
 	}
 
 	for _, v := range static {
-		if v.Config.Switch {
-			app.Static(v.Prefix, v.Root, v.Config.Static)
-		} else {
-			app.Static(v.Prefix, v.Root)
-		}
+		app.Static(v.Prefix, v.Root, v.FiberStatic...)
 	}
 
 	// custom return results

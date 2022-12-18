@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"home/pkg/utils/xfile"
@@ -102,6 +103,10 @@ func gen(tplName string, project Project) (err error) {
 
 	targetFile = strings.ReplaceAll(targetFile, "{app}", project.App)
 	targetFile = strings.ReplaceAll(targetFile, "{targetName}", project.TargetName)
+	if err = xfile.Exists(targetFile); err == nil {
+		return errors.New(targetFile + " already exists, please delete it first!")
+	}
+
 	if err = xfile.MakeDirectory(filepath.Dir(targetFile)); err != nil {
 		return
 	}
