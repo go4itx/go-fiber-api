@@ -1,4 +1,4 @@
-package xgorm
+package storage
 
 import (
 	"errors"
@@ -11,7 +11,7 @@ import (
 	"gorm.io/gorm/schema"
 )
 
-type Config struct {
+type Gorm struct {
 	Debug           bool
 	Dsn             string
 	MaxIdleConns    int
@@ -20,8 +20,8 @@ type Config struct {
 	TablePrefix     string
 }
 
-func Build(name string) (db *gorm.DB, err error) {
-	var config Config
+func (g *Gorm) Build(name string) (db *gorm.DB, err error) {
+	var config Gorm
 	if err = conf.Load(name, &config); err != nil {
 		return
 	}

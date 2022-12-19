@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"home/internal/demo/controller"
 	"home/internal/demo/model"
-	"home/pkg/xgo"
-	"home/pkg/xgorm"
+	"home/pkg/storage"
+	"home/pkg/utils/xgo"
 	"log"
 	"time"
 
@@ -26,8 +26,8 @@ func main() {
 
 // initDB connect to database
 func initDB() error {
-	// return nil
-	db, err := xgorm.Build("mysql.test")
+	gorm := storage.Gorm{}
+	db, err := gorm.Build("mysql.test")
 	if err != nil {
 		return err
 	}

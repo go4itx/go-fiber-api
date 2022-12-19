@@ -2,7 +2,7 @@ package main
 
 import (
 	"home/internal/{{.App}}/controller"
-	"home/pkg/xgo"
+	"home/pkg/utils/xgo"
 	"log"
 )
 

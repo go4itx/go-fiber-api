@@ -2,6 +2,7 @@
 .vscode
 web*
 ws-*
+config/config.go
 config/*.json
 config/*-dev.toml
 config/*-pro.toml

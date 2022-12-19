@@ -2,39 +2,26 @@ package conf
 
 import (
 	"flag"
-	"fmt"
-	"path"
-	"strings"
+	"home/pkg/utils/xviper"
 
 	"github.com/spf13/viper"
 )
 
-var Viper *viper.Viper
+var (
+	Viper *viper.Viper
+)
 
 // init viper
 func init() {
+	vc := xviper.Config{}
+	// 方式一: 需自己自己实现config.Init() 返回参数Param
+	// vc = config.Init()
+	// 方式二：通过读取命令行参数
 	arg := flag.String("config", "config/config.toml", "config file path")
 	flag.Parse()
-	Viper = New(*arg)
-}
-
-// New Viper
-func New(filePath string) *viper.Viper {
-	ext := path.Ext(filePath)
-	dir, name := path.Split(filePath)
-	if dir == "" {
-		dir = "./"
-	}
-
-	v := viper.New()
-	v.AddConfigPath(dir)
-	v.SetConfigType(strings.TrimLeft(ext, "."))
-	v.SetConfigName(strings.ReplaceAll(name, ext, ""))
-	if err := v.ReadInConfig(); err != nil {
-		panic(fmt.Sprintf("Fatal error config file: %v \n", err.Error()))
-	}
-
-	return v
+	vc.URL = *arg
+	// 创建Viper
+	Viper = xviper.New(vc)
 }
 
 // Load specify configuration
