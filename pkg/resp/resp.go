@@ -55,7 +55,7 @@ func (response Response) JSON(params ...interface{}) (err error) {
 	return response.ctx.Status(fiber.StatusOK).JSON(Ret{
 		Code:       ee.Code,
 		Msg:        ee.Message,
-		ServerTime: time.Now().Unix(),
+		ServerTime: time.Now().UnixNano() / 1e6,
 		Data:       data,
 	})
 }

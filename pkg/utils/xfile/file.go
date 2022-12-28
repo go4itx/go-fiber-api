@@ -24,7 +24,7 @@ func GetCurrentDirectory() (dir string, err error) {
 
 // MakeDirectory ...
 func MakeDirectory(path string) (err error) {
-	if err = Exists(path); err != nil {
+	if !Exists(path) {
 		return os.MkdirAll(path, 0755)
 	}
 
@@ -32,10 +32,34 @@ func MakeDirectory(path string) (err error) {
 }
 
 // Exists ...
-func Exists(path string) (err error) {
-	if _, err = os.Stat(path); os.IsNotExist(err) {
-		return
+func Exists(path string) bool {
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		log.Println(path, err)
+		return false
 	}
 
-	return
+	return true
+}
+
+// ListFiles returns all file names in `dir`
+func ListFiles(dir string, ext string) []string {
+	fs, err := os.ReadDir(dir)
+	if err != nil {
+		return []string{}
+	}
+
+	var ret []string
+	for _, fp := range fs {
+		if fp.IsDir() {
+			continue
+		}
+
+		if ext != "" && filepath.Ext(fp.Name()) != ext {
+			continue
+		}
+
+		ret = append(ret, fp.Name())
+	}
+
+	return ret
 }

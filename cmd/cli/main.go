@@ -87,8 +87,8 @@ func main() {
 // gen 根据模板生成对应目标文件
 func gen(tplName string, project Project) (err error) {
 	tplFile := TPL_PATH + tplName
-	if err = xfile.Exists(tplFile); err != nil {
-		return
+	if !xfile.Exists(tplFile) {
+		return errors.New(tplFile + " does not exist!")
 	}
 
 	tpl, err := template.ParseFiles(tplFile)
@@ -103,7 +103,7 @@ func gen(tplName string, project Project) (err error) {
 
 	targetFile = strings.ReplaceAll(targetFile, "{app}", project.App)
 	targetFile = strings.ReplaceAll(targetFile, "{targetName}", project.TargetName)
-	if err = xfile.Exists(targetFile); err == nil {
+	if xfile.Exists(targetFile) {
 		return errors.New(targetFile + " already exists, please delete it first!")
 	}
 
