@@ -1,12 +1,16 @@
 .idea
 .vscode
 main
+main.go
 web*
 ws-*
 config/config.go
 config/*.json
 config/*-dev.toml
 config/*-pro.toml
+pkg/conf/*.json
+pkg/conf/*-dev.toml
+pkg/conf/*-pro.toml
 
 # Ignored items
 cmd/admin
