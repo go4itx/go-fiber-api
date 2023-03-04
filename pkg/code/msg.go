@@ -1,26 +1,14 @@
 package code
 
-// relation code Corresponding message
-var relation = map[int]string{
-	OK: "SUCCESS",
-	// client
-	ParamsIsInvalid:   "参数无效",
-	LoginFailed:       "账号或密码错误",
-	UserStatusDisable: "账号已禁用",
-
-	// server
+// statusMessage NOTE: Keep this in sync with the status code list
+var statusMessage = map[int]string{
+	OK:                        "成功",
+	ParamsIsInvalid:           "参数无效",
+	LoginFailed:               "登录失败",
+	UserStatusDisable:         "用户状态不可用",
 	ServerError:               "服务端错误",
 	DatabaseError:             "数据库错误",
 	DatabaseRowsAffectedError: "影响行数为零",
-	UserInfoFailed:            "获取用户失败",
+	UserInfoFailed:            "用户信息错误",
 	UserRegisterFailed:        "用户注册失败",
-}
-
-// Message get msg by code
-func Message(code int) string {
-	if msg, ok := relation[code]; ok {
-		return msg
-	} else {
-		return ""
-	}
 }

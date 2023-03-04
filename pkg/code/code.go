@@ -1,28 +1,26 @@
 package code
 
-// OK 成功
-const OK int = 0
+const (
+	OK = 0 //@msg 成功
+	// ==================客户端 400xxx==================
+	ParamsIsInvalid   = 400001 //@msg 参数无效
+	LoginFailed       = 400002 //@msg 登录失败
+	UserStatusDisable = 400003 //@msg 用户状态不可用
 
-//==================客户端 400xxx==================
-// ParamsIsInvalid 参数无效
-const ParamsIsInvalid int = 400001
+	// ==================服务端 500xxx==================
+	ServerError               = 500001 //@msg 服务端错误
+	DatabaseError             = 500002 //@msg 数据库错误
+	DatabaseRowsAffectedError = 500003 //@msg 影响行数为零
 
-// LoginFailed 登录失败
-const LoginFailed int = 400002
+	UserInfoFailed     = 500004 //@msg 用户信息错误
+	UserRegisterFailed = 500005 //@msg 用户注册失败
+)
 
-// UserStatusDisable 用户状态不可用
-const UserStatusDisable int = 400003
-
-//==================服务端 500xxx==================
-// ServerError 服务端错误
-const ServerError int = 500001
-
-// ServerError 数据库错误
-const DatabaseError int = 500002
-const DatabaseRowsAffectedError int = 500003
-
-// UserInfoFailed 用户信息错误
-const UserInfoFailed int = 500004
-
-// UserRegisterFailed 用户注册失败
-const UserRegisterFailed int = 500005
+// Message returns the correct message
+func Message(code int) string {
+	if msg, ok := statusMessage[code]; ok {
+		return msg
+	} else {
+		return ""
+	}
+}

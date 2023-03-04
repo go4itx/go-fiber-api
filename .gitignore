@@ -1,7 +1,7 @@
 .idea
 .vscode
 main
-main.go
+/main.go
 web*
 ws-*
 config/config.go

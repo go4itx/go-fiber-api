@@ -14,21 +14,21 @@ import (
 )
 
 const (
-	TPL_PATH        = "cmd/cli/template/"
-	CMD_MAIN        = "cmd.main.txt"
-	CONTROLLER      = "controller.txt"
-	CONTROLLER_INIT = "controller.init.txt"
-	SERVICE         = "service.txt"
-	SERVICE_INIT    = "service.init.txt"
+	tplPath        = "cmd/cli/template/"
+	cmdMain        = "cmd.main.txt"
+	controller     = "controller.txt"
+	controllerInit = "controller.init.txt"
+	service        = "service.txt"
+	serviceInit    = "service.init.txt"
 )
 
 var (
 	Relation = map[string]string{
-		CMD_MAIN:        "cmd/{app}/main.go",
-		CONTROLLER:      "internal/{app}/controller/{targetName}.go",
-		CONTROLLER_INIT: "internal/{app}/controller/init.go",
-		SERVICE:         "internal/{app}/service/{targetName}.go",
-		SERVICE_INIT:    "internal/{app}/service/init.go",
+		cmdMain:        "cmd/{app}/main.go",
+		controller:     "internal/{app}/controller/{targetName}.go",
+		controllerInit: "internal/{app}/controller/init.go",
+		service:        "internal/{app}/service/{targetName}.go",
+		serviceInit:    "internal/{app}/service/init.go",
 	}
 )
 
@@ -61,9 +61,9 @@ func main() {
 			targets = append(targets, key)
 		}
 	case "s":
-		targets = []string{SERVICE}
+		targets = []string{service}
 	case "c":
-		targets = []string{CONTROLLER}
+		targets = []string{controller}
 	default:
 		log.Println("unknown module")
 		return
@@ -86,7 +86,7 @@ func main() {
 
 // gen 根据模板生成对应目标文件
 func gen(tplName string, project Project) (err error) {
-	tplFile := TPL_PATH + tplName
+	tplFile := tplPath + tplName
 	if !xfile.Exists(tplFile) {
 		return errors.New(tplFile + " does not exist!")
 	}

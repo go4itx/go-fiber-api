@@ -38,7 +38,7 @@ func New(config Config) *viper.Viper {
 
 	// 通过网络获取(http/https)
 	if strings.Contains(config.URL, "http://") || strings.Contains(config.URL, "https://") {
-		data, err := client.HttpGet(config.URL)
+		data, err := client.Request(config.URL).Result()
 		if err != nil {
 			panic(err)
 		}
