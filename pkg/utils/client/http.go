@@ -11,12 +11,9 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-const (
-	UserAgent string = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36"
-)
-
 var (
-	httpClient = fiber.AcquireClient()
+	timeout   = 30 * time.Second
+	userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36"
 )
 
 type request struct {
@@ -28,25 +25,27 @@ type request struct {
 
 // Request send a http request
 func Request(url string, method ...string) (req request) {
-	if len(method) == 0 {
-		method = []string{fiber.MethodGet}
+	methodName := fiber.MethodGet
+	if len(method) > 0 && method[0] != "" {
+		methodName = strings.ToUpper(method[0])
 	}
 
-	switch method[0] {
+	client := fiber.AcquireClient()
+	switch methodName {
 	case fiber.MethodHead:
-		req.agent = httpClient.Head(url)
+		req.agent = client.Head(url)
 	case fiber.MethodGet:
-		req.agent = httpClient.Get(url)
+		req.agent = client.Get(url)
 	case fiber.MethodPost:
-		req.agent = httpClient.Post(url)
+		req.agent = client.Post(url)
 	case fiber.MethodPut:
-		req.agent = httpClient.Put(url)
+		req.agent = client.Put(url)
 	case fiber.MethodPatch:
-		req.agent = httpClient.Patch(url)
+		req.agent = client.Patch(url)
 	case fiber.MethodDelete:
-		req.agent = httpClient.Delete(url)
+		req.agent = client.Delete(url)
 	default:
-		req.err = fmt.Errorf("the method is not supported: %s", method[0])
+		req.err = fmt.Errorf("the method is not supported: %s", methodName)
 	}
 
 	return
@@ -106,21 +105,21 @@ func (req request) UserAgent(userAgent string) request {
 
 // Result returns
 func (req request) Result(v ...interface{}) (bytes []byte, err error) {
-	defer req.agent.CloseIdleConnections()
+	defer req.agent.ConnectionClose()
 	if req.err != nil {
 		err = e.NewError(code.ParamsIsInvalid, req.err.Error())
 		return
 	}
 
 	if req.timeout != 0 {
-		req.agent.Timeout(req.timeout)
+		timeout = req.timeout
 	}
 
-	userAgent := UserAgent
 	if req.userAgent != "" {
 		userAgent = req.userAgent
 	}
 
+	req.agent.Timeout(timeout)
 	req.agent.UserAgent(userAgent)
 	if err = req.agent.Parse(); err != nil {
 		err = e.NewError(code.ParamsIsInvalid, err.Error())
