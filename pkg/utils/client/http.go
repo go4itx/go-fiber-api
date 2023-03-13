@@ -12,7 +12,7 @@ import (
 )
 
 var (
-	timeout   = 30 * time.Second
+	timeout   = 1 * time.Minute
 	userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36"
 )
 
@@ -51,8 +51,18 @@ func Request(url string, method ...string) (req request) {
 	return
 }
 
+// Debug mode enables logging request and response detail
 func (req request) Debug() request {
 	req.agent.Debug()
+	return req
+}
+
+// Retry controls whether a retry should be attempted after an error.
+func (req request) Retry(ok bool) request {
+	req.agent.RetryIf(func(r *fiber.Request) bool {
+		return ok
+	})
+
 	return req
 }
 
@@ -105,7 +115,7 @@ func (req request) UserAgent(userAgent string) request {
 
 // Result returns
 func (req request) Result(v ...interface{}) (bytes []byte, err error) {
-	defer req.agent.ConnectionClose()
+	defer fiber.ReleaseAgent(req.agent)
 	if req.err != nil {
 		err = e.NewError(code.ParamsIsInvalid, req.err.Error())
 		return

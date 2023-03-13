@@ -92,6 +92,5 @@ func Init(prefix string, static []Static, noAuth func(*fiber.App), auth func(fib
 		return fiber.ErrNotFound
 	})
 
-	err = app.Listen(config.Addr)
-	return
+	return app.Listen(config.Addr)
 }
