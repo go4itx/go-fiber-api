@@ -34,7 +34,7 @@ func MakeDirectory(path string) (err error) {
 // Exists ...
 func Exists(path string) bool {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
-		log.Println(path, err)
+		// log.Println(path, err)
 		return false
 	}
 

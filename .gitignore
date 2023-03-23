@@ -17,6 +17,8 @@ cmd/admin
 internal/admin
 cmd/bullet
 internal/bullet
+cmd/wechat
+internal/wechat
 
 # Ignored directories
 

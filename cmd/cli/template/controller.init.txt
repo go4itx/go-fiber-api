@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"home/pkg/server"
+	"home/pkg/component/server"
 
 	"github.com/gofiber/fiber/v2"
 )
