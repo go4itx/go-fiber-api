@@ -58,9 +58,9 @@ func (req request) Debug() request {
 }
 
 // Retry controls whether a retry should be attempted after an error.
-func (req request) Retry(ok bool) request {
+func (req request) Retry(b bool) request {
 	req.agent.RetryIf(func(r *fiber.Request) bool {
-		return ok
+		return b
 	})
 
 	return req

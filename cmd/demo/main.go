@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"home/internal/demo/controller"
 	"home/internal/demo/model"
-	"home/pkg/storage"
+	"home/pkg/component/storage"
 	"home/pkg/utils/xgo"
 	"log"
 	"time"

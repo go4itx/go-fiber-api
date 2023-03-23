@@ -2,7 +2,7 @@ package controller
 
 import (
 	_ "home/docs/im"
-	"home/pkg/server"
+	"home/pkg/component/server"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/swagger"

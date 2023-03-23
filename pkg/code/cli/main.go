@@ -13,6 +13,7 @@ const (
 	codeFile = "/pkg/code/code.go"
 )
 
+// 根据code.go自动生成msg.go
 func main() {
 	dir, err := xfile.GetCurrentDirectory()
 	if err != nil {
