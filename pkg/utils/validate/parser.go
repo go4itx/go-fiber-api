@@ -5,8 +5,8 @@ import (
 )
 
 // StructParser Parse and validate struct
-func StructParser(ctx *fiber.Ctx, data interface{}) (err error) {
-	if ctx.Request().Header.IsGet() {
+func StructParser(ctx *fiber.Ctx, data interface{}, query ...bool) (err error) {
+	if (len(query) > 0 && query[0]) || ctx.Request().Header.IsGet() {
 		err = ctx.QueryParser(data)
 	} else {
 		err = ctx.BodyParser(data)
