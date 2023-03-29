@@ -12,31 +12,20 @@ var (
 	Viper *viper.Viper
 )
 
-// //go:embed config-dev.toml
-// var data []byte
+// 方式一: 打包配置文件，通过embed设置xviper.Config，自己实现config()
+// 方式二：通过读取命令行参数，支持http，https网络读取
 
-// // init 方式一: 打包配置文件，在当前目录放置配置文件，通过embed
-// func init() {
-// 	vc := xviper.Config{
-// 		URL:  "",
-// 		Data: data,
-// 		Type: "toml",
-// 	}
-
-// 	// 创建Viper
-// 	Viper = xviper.New(vc)
-// }
-
-// init 方式二：通过读取命令行参数，支持http，https网络读取
+// init ...
 func init() {
+	Viper = xviper.New(config())
+}
+
+func config() xviper.Config {
 	arg := flag.String("config", "config/config.toml", "config file path")
 	flag.Parse()
-	vc := xviper.Config{
+	return xviper.Config{
 		URL: *arg,
 	}
-
-	// 创建Viper
-	Viper = xviper.New(vc)
 }
 
 // Load specify configuration
