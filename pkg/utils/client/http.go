@@ -17,38 +17,30 @@ var (
 )
 
 type request struct {
-	err       error
+	url       string
+	method    string
+	retry     bool
 	agent     *fiber.Agent
 	timeout   time.Duration
 	userAgent string
 }
 
 // Request send a http request
-func Request(url string, method ...string) (req request) {
-	methodName := fiber.MethodGet
+func Request(url string, method ...string) request {
+	httpMethod := fiber.MethodGet
 	if len(method) > 0 && method[0] != "" {
-		methodName = strings.ToUpper(method[0])
+		httpMethod = strings.ToUpper(method[0])
 	}
 
-	client := fiber.AcquireClient()
-	switch methodName {
-	case fiber.MethodHead:
-		req.agent = client.Head(url)
-	case fiber.MethodGet:
-		req.agent = client.Get(url)
-	case fiber.MethodPost:
-		req.agent = client.Post(url)
-	case fiber.MethodPut:
-		req.agent = client.Put(url)
-	case fiber.MethodPatch:
-		req.agent = client.Patch(url)
-	case fiber.MethodDelete:
-		req.agent = client.Delete(url)
-	default:
-		req.err = fmt.Errorf("the method is not supported: %s", methodName)
+	agent := fiber.AcquireAgent()
+	return request{
+		url:       url,
+		method:    httpMethod,
+		retry:     false,
+		agent:     agent,
+		timeout:   timeout,
+		userAgent: userAgent,
 	}
-
-	return
 }
 
 // Debug mode enables logging request and response detail
@@ -59,10 +51,7 @@ func (req request) Debug() request {
 
 // Retry controls whether a retry should be attempted after an error.
 func (req request) Retry(b bool) request {
-	req.agent.RetryIf(func(r *fiber.Request) bool {
-		return b
-	})
-
+	req.retry = b
 	return req
 }
 
@@ -115,26 +104,21 @@ func (req request) UserAgent(userAgent string) request {
 
 // Result returns
 func (req request) Result(v ...interface{}) (bytes []byte, err error) {
-	defer fiber.ReleaseAgent(req.agent)
-	if req.err != nil {
-		err = e.NewError(code.ParamsIsInvalid, req.err.Error())
-		return
-	}
+	defer req.agent.ConnectionClose()
+	req.agent.Timeout(req.timeout)
+	req.agent.UserAgent(req.userAgent)
 
-	if req.timeout != 0 {
-		timeout = req.timeout
-	}
-
-	if req.userAgent != "" {
-		userAgent = req.userAgent
-	}
-
-	req.agent.Timeout(timeout)
-	req.agent.UserAgent(userAgent)
+	r := req.agent.Request()
+	r.SetRequestURI(req.url)
+	r.Header.SetMethod(req.method)
 	if err = req.agent.Parse(); err != nil {
 		err = e.NewError(code.ParamsIsInvalid, err.Error())
 		return
 	}
+
+	req.agent.RetryIf(func(r *fiber.Request) bool {
+		return req.retry
+	})
 
 	var (
 		errs       []error
@@ -155,7 +139,7 @@ func (req request) Result(v ...interface{}) (bytes []byte, err error) {
 
 	if statusCode != fiber.StatusOK {
 		err = fiber.NewError(statusCode)
-		return
+		log.Println("error: ", req.url, err)
 	}
 
 	return

@@ -5,20 +5,18 @@ main
 web*
 ws-*
 config/config.go
-config/*.json
-config/*-dev.toml
-config/*-pro.toml
-pkg/conf/*.json
-pkg/conf/*-dev.toml
-pkg/conf/*-pro.toml
+config/config-*.json
+config/config-*.toml
+pkg/conf/config-*.json
+pkg/conf/config-*.toml
 
 # Ignored items
 cmd/admin
 internal/admin
 cmd/bullet
 internal/bullet
-cmd/wechat
-internal/wechat
+cmd/chat
+internal/chat
 
 # Ignored directories
 
