@@ -2,6 +2,7 @@
 .vscode
 main
 /main.go
+/log.log
 web*
 ws-*
 config/config.go
@@ -14,8 +15,8 @@ pkg/conf/config-*.toml
 # Ignored items
 cmd/admin
 internal/admin
-cmd/bullet
-internal/bullet
+cmd/barrage
+internal/barrage
 cmd/chat
 internal/chat
 

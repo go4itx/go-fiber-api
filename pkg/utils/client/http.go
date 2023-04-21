@@ -5,10 +5,12 @@ import (
 	"home/pkg/code"
 	"home/pkg/e"
 	"log"
+	"net"
 	"strings"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/valyala/fasthttp"
 )
 
 var (
@@ -116,6 +118,10 @@ func (req request) Result(v ...interface{}) (bytes []byte, err error) {
 		return
 	}
 
+	req.agent.Dial = func(addr string) (net.Conn, error) {
+		return fasthttp.DialTimeout(addr, req.timeout)
+	}
+
 	req.agent.RetryIf(func(r *fiber.Request) bool {
 		return req.retry
 	})
@@ -131,15 +137,16 @@ func (req request) Result(v ...interface{}) (bytes []byte, err error) {
 		statusCode, bytes, errs = req.agent.Bytes()
 	}
 
+	if statusCode != fiber.StatusOK {
+		err = fiber.NewError(statusCode)
+		log.Println("error: ", req.url, err)
+		return
+	}
+
 	if len(errs) > 0 {
 		log.Println("errs", errs)
 		err = e.NewError(code.ParamsIsInvalid, errs[0].Error())
 		return
-	}
-
-	if statusCode != fiber.StatusOK {
-		err = fiber.NewError(statusCode)
-		log.Println("error: ", req.url, err)
 	}
 
 	return
