@@ -19,12 +19,13 @@ var (
 )
 
 type request struct {
-	url       string
-	method    string
-	retry     bool
-	agent     *fiber.Agent
-	timeout   time.Duration
-	userAgent string
+	url         string
+	method      string
+	queryString string
+	retry       bool
+	agent       *fiber.Agent
+	timeout     time.Duration
+	userAgent   string
 }
 
 // Request send a http request
@@ -36,12 +37,13 @@ func Request(url string, method ...string) request {
 
 	agent := fiber.AcquireAgent()
 	return request{
-		url:       url,
-		method:    httpMethod,
-		retry:     false,
-		agent:     agent,
-		timeout:   timeout,
-		userAgent: userAgent,
+		url:         url,
+		method:      httpMethod,
+		queryString: "",
+		retry:       false,
+		agent:       agent,
+		timeout:     timeout,
+		userAgent:   userAgent,
 	}
 }
 
@@ -64,7 +66,19 @@ func (req request) QueryString(m map[string]interface{}) request {
 		str += fmt.Sprintf("%s=%v&", k, v)
 	}
 
-	req.agent.QueryString(strings.TrimRight(str, "&"))
+	req.queryString = strings.TrimRight(str, "&")
+	return req
+}
+
+// Form sends a form request by setting the Content-Type header to application/x-www-form-urlencoded.
+func (req request) Form(m map[string]interface{}) request {
+	args := fiber.AcquireArgs()
+	for k, v := range m {
+		args.Set(k, fmt.Sprintf("%v", v))
+	}
+
+	req.agent.Form(args)
+	fiber.ReleaseArgs(args)
 	return req
 }
 
@@ -80,15 +94,21 @@ func (req request) XML(v interface{}) request {
 	return req
 }
 
-// Form sends a form request by setting the Content-Type header to application/x-www-form-urlencoded.
-func (req request) Form(param fiber.Map) request {
-	args := fiber.AcquireArgs()
-	for k, v := range param {
-		args.Set(k, fmt.Sprintf("%v", v))
-	}
+// Set sets the given 'key: value' header.
+func (req request) Set(k, v string) request {
+	req.agent.Set(k, v)
+	return req
+}
 
-	req.agent.Form(args)
-	fiber.ReleaseArgs(args)
+// Cookie sets one 'key: value' cookie.
+func (req request) Cookie(k, v string) request {
+	req.agent.Cookie(k, v)
+	return req
+}
+
+// Cookies sets multiple 'key: value' cookies.
+func (req request) Cookies(kv ...string) request {
+	req.agent.Cookies(kv...)
 	return req
 }
 
@@ -104,15 +124,25 @@ func (req request) UserAgent(userAgent string) request {
 	return req
 }
 
+// SetResponse sets custom response for the Agent instance.
+func (req request) SetResponse(customResp *fiber.Response) request {
+	req.agent.SetResponse(customResp)
+	return req
+}
+
 // Result returns
 func (req request) Result(v ...interface{}) (bytes []byte, err error) {
 	defer req.agent.ConnectionClose()
 	req.agent.Timeout(req.timeout)
 	req.agent.UserAgent(req.userAgent)
 
-	r := req.agent.Request()
-	r.SetRequestURI(req.url)
-	r.Header.SetMethod(req.method)
+	ar := req.agent.Request()
+	ar.SetRequestURI(req.url)
+	ar.Header.SetMethod(req.method)
+	if req.queryString != "" {
+		req.agent.QueryString(req.queryString)
+	}
+
 	if err = req.agent.Parse(); err != nil {
 		err = e.NewError(code.ParamsIsInvalid, err.Error())
 		return
