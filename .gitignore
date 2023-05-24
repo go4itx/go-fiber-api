@@ -19,6 +19,8 @@ cmd/barrage
 internal/barrage
 cmd/chat
 internal/chat
+cmd/monster
+internal/monster
 
 # Ignored directories
 

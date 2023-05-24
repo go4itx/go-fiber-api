@@ -1,6 +1,7 @@
 package client
 
 import (
+	"encoding/json"
 	"fmt"
 	"home/pkg/code"
 	"home/pkg/e"
@@ -10,6 +11,7 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/utils"
 	"github.com/valyala/fasthttp"
 )
 
@@ -66,7 +68,13 @@ func (req request) QueryString(m map[string]interface{}) request {
 		str += fmt.Sprintf("%s=%v&", k, v)
 	}
 
-	req.queryString = strings.TrimRight(str, "&")
+	if req.queryString != "" {
+		req.queryString += "&" + str
+	} else {
+		req.queryString = str
+	}
+
+	req.queryString = strings.TrimRight(req.queryString, "&")
 	return req
 }
 
@@ -84,6 +92,12 @@ func (req request) Form(m map[string]interface{}) request {
 
 // JSON sends a JSON request by setting the Content-Type header to application/json.
 func (req request) JSON(v interface{}) request {
+	if str, ok := v.(string); ok {
+		if json.Valid([]byte(str)) {
+			json.Unmarshal([]byte(str), &v)
+		}
+	}
+
 	req.agent.JSON(v)
 	return req
 }
@@ -168,7 +182,11 @@ func (req request) Result(v ...interface{}) (bytes []byte, err error) {
 	}
 
 	if statusCode != fiber.StatusOK {
-		err = fiber.NewError(statusCode)
+		if statusCode == 0 {
+			statusCode = 400
+		}
+
+		err = e.NewError(statusCode, req.url+" "+utils.StatusMessage(statusCode))
 		log.Println("error: ", req.url, err)
 		return
 	}
