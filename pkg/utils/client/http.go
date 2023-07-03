@@ -17,7 +17,7 @@ import (
 
 var (
 	timeout   = 1 * time.Minute
-	userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36"
+	userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36"
 )
 
 type request struct {
@@ -187,7 +187,7 @@ func (req request) Result(v ...interface{}) (bytes []byte, err error) {
 		}
 
 		err = e.NewError(statusCode, req.url+" "+utils.StatusMessage(statusCode))
-		log.Println("error: ", req.url, err)
+		log.Println("error: ", statusCode, err)
 		return
 	}
 
