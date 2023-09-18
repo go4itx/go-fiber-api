@@ -1,17 +1,14 @@
-package storage
+package xgorm
 
 import (
-	"errors"
-	"home/pkg/conf"
 	"time"
 
-	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
 )
 
-type Gorm struct {
+type Config struct {
 	Debug           bool
 	Dsn             string
 	MaxIdleConns    int
@@ -20,23 +17,14 @@ type Gorm struct {
 	TablePrefix     string
 }
 
-func (g *Gorm) Build(name string) (db *gorm.DB, err error) {
-	var config Gorm
-	if err = conf.Load(name, &config); err != nil {
-		return
-	}
-
-	if config.Dsn == "" {
-		err = errors.New("gorm conf dns is empty")
-		return
-	}
-
+// Init ...
+func Init(dialector gorm.Dialector, config Config) (db *gorm.DB, err error) {
 	Logger := logger.Default
 	if config.Debug {
 		Logger = Logger.LogMode(logger.Info)
 	}
 
-	db, err = gorm.Open(mysql.Open(config.Dsn), &gorm.Config{
+	db, err = gorm.Open(dialector, &gorm.Config{
 		Logger: Logger,
 		NamingStrategy: schema.NamingStrategy{
 			SingularTable: true,

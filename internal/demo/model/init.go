@@ -11,7 +11,7 @@ func Init(gormDB *gorm.DB) (err error) {
 	db = gormDB
 	// AutoMigrate data
 	if !db.Migrator().HasTable(&User{}) {
-		err = db.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(&User{})
+		err = db.AutoMigrate(&User{})
 		if err != nil {
 			return
 		}

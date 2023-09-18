@@ -23,3 +23,11 @@
     maxIdleConns = 5
     maxOpenConns = 10
     tablePrefix = ""
+
+[sqlite.test]
+    connMaxLifetime = 300 #secend
+    debug = true
+    dsn = "./fiber_rest.db"
+    maxIdleConns = 5
+    maxOpenConns = 10
+    tablePrefix = ""

@@ -12,7 +12,7 @@ type User struct {
 	RoleID   uint   `gorm:"type:int(10); unsigned; not null; comment:角色" json:"roleID"`
 	Name     string `gorm:"type:varchar(20); unique; not null; comment:名称" json:"name"`
 	Password string `gorm:"type:varchar(80);not null;comment:密码" json:"-"` //密码不返回
-	Status   uint8  `gorm:"type:tinyint(1) unsigned NOT NULL;default:1;comment:状态：#1启用 #2禁用" json:"status"`
+	Status   uint8  `gorm:"type:tinyint(1); unsigned; not null;default:1;comment:状态：#1启用 #2禁用" json:"status"`
 }
 
 // BeforeCreate hook
