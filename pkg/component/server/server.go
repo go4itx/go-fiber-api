@@ -16,6 +16,9 @@ import (
 
 type Config struct {
 	Addr       string
+	EnableTLS  bool
+	KeyFile    string
+	CertFile   string
 	EnableCors bool
 	EnableCsrf bool
 	Logger     bool
@@ -92,5 +95,9 @@ func Init(prefix string, static []Static, noAuth func(*fiber.App), auth func(fib
 		return fiber.ErrNotFound
 	})
 
-	return app.Listen(config.Addr)
+	if config.EnableTLS {
+		return app.ListenTLS(config.Addr, config.CertFile, config.KeyFile)
+	} else {
+		return app.Listen(config.Addr)
+	}
 }

@@ -5,6 +5,7 @@ main
 /log.log
 web*
 ws-*
+cert/
 config/config.go
 config/config-*.json
 config/config-*.toml

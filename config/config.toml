@@ -1,5 +1,8 @@
 [server.http]
     addr = "0.0.0.0:20105"
+    enableTLS = false
+    keyFile = "./cert/private.key"
+    certFile = "./cert/certificate.crt"
     logger = true
     enableCors = true
     enableCsrf = false

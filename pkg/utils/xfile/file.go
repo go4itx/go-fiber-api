@@ -42,13 +42,13 @@ func Exists(path string) bool {
 }
 
 // ListFiles returns all file names in `dir`
-func ListFiles(dir string, ext string) []string {
+func ListFiles(dir string, ext string) (res []string) {
+	res = make([]string, 0)
 	fs, err := os.ReadDir(dir)
 	if err != nil {
-		return []string{}
+		return res
 	}
 
-	var ret []string
 	for _, fp := range fs {
 		if fp.IsDir() {
 			continue
@@ -58,8 +58,8 @@ func ListFiles(dir string, ext string) []string {
 			continue
 		}
 
-		ret = append(ret, fp.Name())
+		res = append(res, fp.Name())
 	}
 
-	return ret
+	return res
 }
