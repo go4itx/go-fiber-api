@@ -6,7 +6,6 @@ main
 web*
 ws-*
 cert/
-config/config.go
 config/config-*.json
 config/config-*.toml
 pkg/conf/embed.go

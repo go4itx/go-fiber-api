@@ -2,8 +2,8 @@ package sqlite
 
 import (
 	"errors"
+	conf "home/config"
 	"home/pkg/component/storage/xgorm"
-	"home/pkg/conf"
 
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"

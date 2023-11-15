@@ -2,8 +2,8 @@ package mysql
 
 import (
 	"errors"
+	conf "home/config"
 	"home/pkg/component/storage/xgorm"
-	"home/pkg/conf"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"

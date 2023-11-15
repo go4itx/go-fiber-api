@@ -1,8 +1,8 @@
 package service
 
 import (
+	conf "home/config"
 	"home/pkg/code"
-	"home/pkg/conf"
 	"home/pkg/e"
 	"home/pkg/utils/jwt"
 )

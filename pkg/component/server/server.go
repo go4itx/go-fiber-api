@@ -1,10 +1,11 @@
 package server
 
 import (
-	"home/pkg/conf"
+	conf "home/config"
 	"home/pkg/e"
 	"home/pkg/resp"
 	"home/pkg/utils/jwt"
+	"os"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -69,6 +70,11 @@ func Init(prefix string, static []Static, noAuth func(*fiber.App), auth func(fib
 	// custom return results
 	app.Get("/", func(ctx *fiber.Ctx) error {
 		return resp.New(ctx).JSON("hello world")
+	})
+
+	// Getpid
+	app.Get("/pid", func(ctx *fiber.Ctx) error {
+		return resp.New(ctx).JSON(os.Getpid())
 	})
 
 	if noAuth != nil {

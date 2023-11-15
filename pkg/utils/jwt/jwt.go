@@ -1,7 +1,7 @@
 package jwt
 
 import (
-	"home/pkg/conf"
+	conf "home/config"
 	"log"
 	"time"
 
