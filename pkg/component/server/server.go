@@ -5,7 +5,11 @@ import (
 	"home/pkg/e"
 	"home/pkg/resp"
 	"home/pkg/utils/jwt"
+	"log"
 	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -24,6 +28,7 @@ type Config struct {
 	EnableCsrf bool
 	Logger     bool
 	BodyLimit  int
+	DelayExit  uint8
 }
 
 type Static struct {
@@ -101,9 +106,30 @@ func Init(prefix string, static []Static, noAuth func(*fiber.App), auth func(fib
 		return fiber.ErrNotFound
 	})
 
-	if config.EnableTLS {
-		return app.ListenTLS(config.Addr, config.CertFile, config.KeyFile)
-	} else {
-		return app.Listen(config.Addr)
+	go func() {
+		if config.EnableTLS {
+			err = app.ListenTLS(config.Addr, config.CertFile, config.KeyFile)
+		} else {
+			err = app.Listen(config.Addr)
+		}
+
+		if err != nil {
+			log.Panic(err)
+		}
+	}()
+
+	c := make(chan os.Signal, 1)                    // Create channel to signify a signal being sent
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM) // When an interrupt or termination signal is sent, notify the channel
+	<-c                                             // This blocks the main thread until an interrupt is received
+	log.Println("Gracefully shutting down...")
+	if err = app.Shutdown(); err != nil {
+		log.Println("err", err)
 	}
+
+	log.Println("Running cleanup tasks...")
+	// Your cleanup tasks go here
+	// db.Close()、redisConn.Close() ...
+	time.Sleep(time.Duration(config.DelayExit) * time.Second) //延迟退出程序，确保其它协程完成任务
+	log.Println("APP was successful shutdown.")
+	return
 }

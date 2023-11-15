@@ -6,6 +6,7 @@
     logger = true
     enableCors = true
     enableCsrf = false
+    delayExit = 3 # 优雅关闭后，延迟退出程序(时间秒)
 
 [server.im]
     maxConns = 100
