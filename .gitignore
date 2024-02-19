@@ -21,6 +21,8 @@ cmd/chat
 internal/chat
 cmd/monster
 internal/monster
+cmd/supervisor
+internal/supervisor
 
 # Ignored directories
 
